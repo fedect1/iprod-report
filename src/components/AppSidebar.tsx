@@ -1,6 +1,6 @@
 'use client'
 
-import { FilePieChart, BarChart, Home, Settings, ChevronDown } from "lucide-react"
+import { FilePieChart, BarChart, Home, Settings, ChevronDown, ClipboardList } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -26,6 +26,16 @@ const items = [
     title: "Home",
     url: "/",
     icon: Home,
+  },
+  {
+    title: "Order Managment",
+    url: "#",
+    icon: ClipboardList,
+    subItems: [
+      { title: "Orders", url: "/order-managment/orders" },
+      { title: "Materials", url: "/order-managment/material" },
+      { title: "Recipes", url: "/order-managment/recipes" },
+    ]
   },
   {
     title: "State",

@@ -1,13 +1,20 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card"
+"use client"
 
-// Datos de columnas y filas.
-// La primera columna es solo "Parameter" (descripción).
-// Las siguientes columnas (M21, M22, ..., Total) se representarán con Cards.
+import React from "react"
+
+import { Check } from "lucide-react"
+
+// 1. Importamos los componentes de tabla de shadcn/ui
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+// 2. Definimos las columnas
 const columns = [
   "Parameter",
   "M21",
@@ -19,6 +26,7 @@ const columns = [
   "Total",
 ]
 
+// 3. Definimos las filas (datos)
 const rows = [
   {
     parameter: "Throughput Act. [kg/h]",
@@ -102,36 +110,81 @@ const rows = [
   },
 ]
 
+// 4. Componente que renderiza la tabla
 export function ProductionDataTable() {
-  // columns[0] = "Parameter". A partir de columns[1] vienen M21, M22, ..., Total.
-  // Renderizamos una Card por cada columna (menos "Parameter").
-  const machineColumns = columns.slice(1) // ["M21", "M22", "M23", "M24", "M25", "M26", "Total"]
+  // Estado para saber cuál fila se acaba de copiar
+  const [justCopiedRow, setJustCopiedRow] = React.useState<number | null>(null)
+
+  // Función para copiar la fila al portapapeles
+  const copyRowToClipboard = (
+    row: { parameter: string; values: (string | number)[] },
+    rowIndex: number
+  ) => {
+    // Construimos la cadena de texto:
+    // Primera línea => row.parameter
+    // Segunda línea => "M21: 123 M22: 456 ..."
+    const columnsExceptParameter = columns.slice(1) // ["M21", "M22", ... "Total"]
+    const rowString = [
+      row.parameter,
+      columnsExceptParameter
+        .map((colName, i) => `${colName}: ${row.values[i]}`)
+        .join(" "),
+    ].join("\n")
+
+    navigator.clipboard.writeText(rowString).then(() => {
+      // Guardamos el índice de la fila que se acaba de copiar
+      setJustCopiedRow(rowIndex)
+
+      // Ocultamos el check luego de 1 segundo
+      setTimeout(() => {
+        setJustCopiedRow(null)
+      }, 1000)
+    })
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {machineColumns.map((colName, colIndex) => (
-        <Card key={colName}>
-          <CardHeader>
-            <CardTitle>{colName}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {rows.map((row) => {
-              // El valor de 'row.values' para esta columna es row.values[colIndex]
-              // colIndex = 0 => M21, colIndex = 1 => M22, etc.
-              const value = row.values[colIndex]
-              return (
-                <div
-                  key={row.parameter}
-                  className="flex justify-between py-1 text-sm border-b last:border-none"
-                >
-                  <span className="font-medium">{row.parameter}</span>
-                  <span>{value}</span>
-                </div>
-              )
-            })}
-          </CardContent>
-        </Card>
-      ))}
+    <div className="w-full">
+      <Table className="w-full table-auto">
+        <TableHeader>
+          <TableRow>
+            {columns.map((col) => (
+              <TableHead key={col}>{col}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row, index) => (
+            <TableRow
+              key={row.parameter}
+              onClick={() => copyRowToClipboard(row, index)}
+              className={`
+                ${index % 2 === 0 ? "bg-gray-50" : ""}
+                hover:bg-green-200 
+                transition-colors 
+                cursor-pointer
+                relative
+              `}
+            >
+              {/* Primera celda => Parameter */}
+              <TableCell className="flex items-center">
+                {row.parameter}
+
+                {/* Si esta fila se acaba de copiar, mostramos el ícono con animación */}
+                {justCopiedRow === index && (
+                  <span className="ml-2 text-green-600 animate-bounce">
+                    <Check className="w-4 h-4" />
+                  </span>
+                )}
+              </TableCell>
+
+              {/* Resto de celdas => valores */}
+              {row.values.map((value, idx) => (
+                <TableCell key={idx}>{value}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }

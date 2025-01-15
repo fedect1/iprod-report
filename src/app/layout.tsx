@@ -30,7 +30,7 @@ export default function RootLayout({
         className={` h-screen  ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex">
-          <AppSidebar/>
+            <AppSidebar/>
           <div className="flex-1 w-full">
             {children}
           </div>
