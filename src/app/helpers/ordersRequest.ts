@@ -58,3 +58,28 @@ export async function getOrdersRequest(page = 1): Promise<OrderList[]> {
     return []; // o lanza el error si prefieres
   }
 }
+
+
+import { Order } from "../order-managment/orders/ui/Columns";
+
+/**
+ * Transforma un objeto OrderList (respuesta cruda de GraphQL)
+ * a un objeto Order (interfaz usada en tu DataTable).
+ */
+export function transformOrderListToOrders(orderList: OrderList[]): Order[] {
+  return orderList.map((item) => {
+    return {
+      idWebMIP: item.idwebmip,
+      // number viene como string, lo parseas a número si hace falta
+      orderNumber: parseInt(item.number, 10),
+      recipe: item.recipe,
+      // status en la BD es number, lo casteamos a 0|1|2|3
+      status: item.status as 0 | 1 | 2 | 3,
+      // extruder ya viene como "M21", "M22", etc.
+      line: item.extruder as "M21" | "M22" | "M23" | "M24" | "M25" | "M26",
+      date: item.datetime,
+      // article también viene como string
+      article: parseInt(item.article, 10),
+    };
+  });
+}

@@ -13,12 +13,11 @@ import { ArrowUpDown } from "lucide-react"
 
 
 export type Order = {
-  id: string
   idWebMIP: number
   orderNumber: number
   recipe: string
-  status: "pending" | "processing" | "success" | "failed"
-  line: "M21" | "M22" | "M23"
+  status: 0 | 1 | 2 | 3
+  line: "M21" | "M22" | "M23" | "M24" | "M25" | "M26"
   date: string
   article: number
 }
@@ -44,7 +43,6 @@ export const columns: ColumnDef<Order>[] = [
        header: ({ column }) => {
         return (
           <div className="flex items-center space-x-2">
-            <span>Line:</span>
             <Select
               // El filtro se obtiene de 'column.getFilterValue()'
               value={(column.getFilterValue() as string) ?? ""}

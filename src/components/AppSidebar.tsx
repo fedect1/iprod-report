@@ -32,7 +32,8 @@ const items = [
     url: "#",
     icon: ClipboardList,
     subItems: [
-      { title: "Orders", url: "/order-managment/orders" },
+      { title: "Overview", url: "/order-managment/orders" },
+      { title: "Create Order", url: "/order-managment/create-order/step-1" },
       { title: "Materials", url: "/order-managment/material" },
       { title: "Recipes", url: "/order-managment/recipes" },
     ]

@@ -1,6 +1,5 @@
 "use client"
 import * as React from "react"
-import { getOrdersRequest, OrderList } from '@/app/helpers/ordersRequest'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -49,16 +48,6 @@ export function DataTable<TData, TValue>({
     },
   })
 
-  const [orders, setOrders] = React.useState<OrderList[]>([])
-
-  // useEffect para hacer fetch en el cliente
-  React.useEffect(() => {
-    async function fetchOrders() {
-      const result = await getOrdersRequest(1)
-      setOrders(result)
-    }
-    fetchOrders()
-  }, [])
 
   return (
     <div className="rounded-md border">
@@ -104,16 +93,6 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-
-      <div>
-      <code>
-          {orders.map((order) => (
-            <li key={order.idwebmip}>
-              <strong>Id:</strong> {order.extruder}
-            </li>
-          ))}
-        </code>
-      </div>
     </div>
   )
 }

@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <div className="flex">
             <AppSidebar/>
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full text-black">
             {children}
           </div>
 
