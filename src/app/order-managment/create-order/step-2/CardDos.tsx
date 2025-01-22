@@ -1,71 +1,87 @@
 // CardDos.tsx
 import React from "react";
-import {
+import { 
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { RecipeDetail } from "@/app/helpers/recipeRequest";
+  CardTitle 
+} from "@/components/ui/card";
 
-// Definimos la interfaz que describe las props que va a recibir CardDos
+// Ajusta esta interfaz a la forma real que tienen tus “details”
+interface RecipeDetail {
+  layer: string;             // "A", "B", "C", etc.
+  layerProportion: number;   // porcentaje de capa
+  material: string;
+  density: number;
+  materialProportion: number;
+  component: number;
+  rawmat: { color: number };
+}
+
 interface CardDosProps {
-  layer: string;               // "A", "B", "C", etc.
-  details: RecipeDetail[];     // Listado de objetos con material, density, etc.
+  layer: string;           // nombre de la capa (A, B, C, ...)
+  details: RecipeDetail[]; // array con info de materiales, densidades, etc.
 }
 
 const CardDos: React.FC<CardDosProps> = ({ layer, details }) => {
-  const layerProportion =
-    details.length > 0 ? details[0].layerProportion : 0;
+  // Si hay al menos 1, tomamos el porcentaje de capa de la primera
+  const layerProportion = details.length > 0 ? details[0].layerProportion : 0;
+
   return (
-    <Card className="max-w-4xl shadow-lg rounded-lg bg-white">
-      <CardHeader className="bg-green-900 text-white rounded-t-lg py-2">
+    <Card className="max-w-4xl shadow-lg rounded-lg bg-white mx-auto">
+      <CardHeader className="bg-black text-white rounded-t-lg py-2">
         <CardTitle className="text-lg font-semibold text-center">
-          Dos. {layer} | {layerProportion}%
+          Layer {layer} | {layerProportion}%
         </CardTitle>
       </CardHeader>
 
       <CardContent className="p-4">
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto">
+          <table className="min-w-full table-auto border">
             <thead>
-              <tr className="bg-gray-200 text-xs">
-                <th className="px-1 py-1 border">Material</th>
-                <th className="px-1 py-1 border">Color</th>
-                <th className="px-1 py-1 border">Component</th>
-                <th className="px-1 py-1 border">Density</th>
-                <th className="px-1 py-1 border">Material Proportion</th>
+              <tr className="bg-gray-200 text-xs uppercase text-gray-700">
+                <th className="px-2 py-2 border">Material</th>
+                <th className="px-2 py-2 border">Color</th>
+                <th className="px-2 py-2 border">Component</th>
+                <th className="px-2 py-2 border">Density</th>
+                <th className="px-2 py-2 border">Proportion</th>
               </tr>
             </thead>
+
             <tbody>
               {details.map((item, idx) => {
-                // Convertimos 'color' decimal a un string hexadecimal (ej. "#FF00AA")
-                const colorHex = "#" + item.rawmat.color.toString(16).padStart(6, '0');
-                
+                // Convertimos 'color' decimal a string hex (#FF00AA)
+                const colorHex =
+                  "#" + item.rawmat.color.toString(16).padStart(6, '0');
+
                 return (
-                  <tr key={idx} className="hover:bg-gray-100 text-xs">
-                    <td className="px-1 py-1 border text-center">
+                  <tr key={idx} className="hover:bg-gray-100 text-sm">
+                    <td className="px-2 py-1 border text-center">
                       {item.material}
                     </td>
-                    <td className="px-1 py-1 border text-center">
-                      {/* Círculo con el color proveniente de item.rawmat.color */}
+                    <td className="px-2 py-1 border text-center">
+                      {/* Círculo que muestra el color */}
                       <div
                         style={{
                           backgroundColor: colorHex,
                           width: "1rem",
                           height: "1rem",
-                          borderRadius: "9999px",
                           margin: "0 auto",
+                          borderRadius: "9999px",
+                          border: "1px solid #ccc"
                         }}
                       />
                     </td>
-                    <td className="px-1 py-1 border text-center">
-                      {item.component == 1 ? item.layer : `${item.layer}${item.component-1}`}
+                    <td className="px-2 py-1 border text-center">
+                      {/* Lógica para mostrar componente */}
+                      {item.component === 1
+                        ? item.layer
+                        : `${item.layer}${item.component - 1}`}
                     </td>
-                    <td className="px-1 py-1 border text-center">
+                    <td className="px-2 py-1 border text-center">
                       {item.density}
                     </td>
-                    <td className="px-1 py-1 border text-center">
+                    <td className="px-2 py-1 border text-center">
                       {item.materialProportion}%
                     </td>
                   </tr>

@@ -19,7 +19,6 @@ const StepTwoForm: React.FC<StepTwoFormProps> = ({ data, onSelectRecipe }) => {
   return (
     <Select
       onValueChange={(value) => {
-        // avisamos al padre que se seleccionó esta receta
         onSelectRecipe(value);
       }}
     >
