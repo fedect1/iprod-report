@@ -1,5 +1,6 @@
 "use client"
 import { Line } from "@/app/helpers/linesRequest"
+import { useRouter } from "next/navigation"     // O "next/router" si usas pages
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -24,60 +25,108 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 
-// 1. Definimos el esquema de validación con zod
-const formSchema = z.object({
-  line: z
-    .string({ required_error: "Please select a line" })
-    .min(1, { message: "Please select a line" }),
-  order: z
-    .number({ required_error: "Please enter your order number" })
-    .min(2, "Minimum order number is 2"),
-  article: z.string({ required_error: "Please enter your article" }),
-  amountPrd: z
-    .number({ required_error: "Please enter your amount" })
-    .min(1, { message: "Please enter a correct amount" }),
-  throughput: z
-    .number({ required_error: "Please enter your throughput" })
-    .min(1, { message: "Please enter a correct amount" }),
-  weight: z
-    .number({ required_error: "Please enter the weight" })
-    .min(1, { message: "Please enter a correct amount" }),
-  thickness: z
-    .number({ required_error: "Please enter the thickness" })
-    .min(1, { message: "Please enter a correct amount" }),
-  width: z
-    .number({ required_error: "Please enter the width" })
-    .min(1, { message: "Please enter a correct amount" }),
-})
-
-type FormSchema = z.infer<typeof formSchema>
+// Importamos el store
+import { useOrderStore } from "@/store/orderStore"
 
 interface LineListProp {
   data: Line[]
 }
 
+// 1. Definimos el esquema de validación con zod
+// 1. Definimos el esquema de validación con zod usando coerce
+const formSchema = z.object({
+  line: z
+    .string({ required_error: "Please select a line" })
+    .min(1, { message: "Please select a line" }),
+  order: z
+    .coerce
+    .number({ required_error: "Please enter your order number" })
+    .min(2, "Minimum order number is 2"),
+  article: z.string({ required_error: "Please enter your article" }),
+  amountPrd: z
+    .coerce
+    .number({ required_error: "Please enter your amount" })
+    .min(1, { message: "Please enter a correct amount" }),
+  throughput: z
+    .coerce
+    .number({ required_error: "Please enter your throughput" })
+    .min(1, { message: "Please enter a correct amount" }),
+  weight: z
+    .coerce
+    .number({ required_error: "Please enter the weight" })
+    .min(1, { message: "Please enter a correct amount" }),
+  thickness: z
+    .coerce
+    .number({ required_error: "Please enter the thickness" })
+    .min(1, { message: "Please enter a correct amount" }),
+  width: z
+    .coerce
+    .number({ required_error: "Please enter the width" })
+    .min(1, { message: "Please enter a correct amount" }),
+});
+
+
+type FormSchema = z.infer<typeof formSchema>
+
 export default function StepOneForm({ data }: LineListProp) {
-  // 2. Instanciamos el formulario con react-hook-form y zod
+  const router = useRouter()
+
+  // 2. Consumimos el store:
+  const {
+    line,
+    order,
+    article,
+    amountPrd,
+    throughput,
+    weight,
+    thickness,
+    width,
+    // recipe, // si lo necesitas
+    setLine,
+    setOrder,
+    setArticle,
+    setAmountPrd,
+    setThroughput,
+    setWeight,
+    setThickness,
+    setWidth,
+    // setRecipe, // si lo necesitas
+  } = useOrderStore()
+
+  // 3. Instanciamos el formulario con RHF + Zod,
+  //    pasando como defaultValues lo que traemos del store.
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      line: "",
-      order: 0,
-      article: "",
-      amountPrd: 0,
-      throughput: 0,
-      weight: 0,
-      thickness: 0,
-      width: 0,
+      line,
+      order,
+      article,
+      amountPrd,
+      throughput,
+      weight,
+      thickness,
+      width,
     },
   })
 
-  // 3. Handler para el submit
+  // 4. Handler para el submit: aquí actualizamos el store
+  //    solo si pasa la validación.
   function onSubmit(values: FormSchema) {
-    // Aquí verás por consola todos los datos que se envíen
-    console.log(values)
+    // Actualizamos el store con los datos del formulario
+    setLine(values.line)
+    setOrder(values.order)
+    setArticle(values.article)
+    setAmountPrd(values.amountPrd)
+    setThroughput(values.throughput)
+    setWeight(values.weight)
+    setThickness(values.thickness)
+    setWidth(values.width)
+
+    // Navegamos a la siguiente página solo tras validación exitosa
+    router.push("/order-managment/create-order/step-2")
+
+    console.log("Nuevo estado:", useOrderStore.getState())
   }
 
   return (
@@ -101,18 +150,18 @@ export default function StepOneForm({ data }: LineListProp) {
                     </SelectTrigger>
                     <SelectContent>
                       {data && data.length > 0 ? (
-                        data.map((line) => {
+                        data.map((lineItem) => {
                           // Convertimos el color decimal a #HEX
                           const colorHex =
-                            "#" + Number(line.lineColour).toString(16).padStart(6, "0")
+                            "#" + Number(lineItem.lineColour).toString(16).padStart(6, "0")
 
                           return (
-                            <SelectItem key={line.lineId} value={line.lineName}>
-                              {line.lineShort}
+                            <SelectItem key={lineItem.lineShort} value={lineItem.lineShort}>
                               <span
                                 className="inline-block ml-2 w-3 h-3 rounded-full border-2 border-black"
                                 style={{ backgroundColor: colorHex }}
-                              />
+                                />
+                                {lineItem.lineShort}
                             </SelectItem>
                           )
                         })
@@ -273,11 +322,11 @@ export default function StepOneForm({ data }: LineListProp) {
               )}
             />
           </div>
-          <Link href={"/order-managment/create-order/step-2"}>
-            <Button type="submit" className="mt-4 w-full md:w-auto">
-              Select Recipe
-            </Button>
-          </Link>
+
+          {/* Botón para submit: NO lo envolvemos en <Link> si queremos validar antes de navegar */}
+          <Button type="submit" className="mt-4 w-full md:w-auto">
+            Select Recipe
+          </Button>
         </form>
       </Form>
     </div>

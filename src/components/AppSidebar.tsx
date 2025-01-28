@@ -94,12 +94,12 @@ export function AppSidebar() {
           {/* Texto a la derecha */}
           <div className="leading-tight">
             <span className="block text-base font-semibold">INNO-PLAST</span>
-            <span className="block text-sm text-gray-500">BluPlast</span>
+            <span className="block text-sm text-gray-500">Lenzing</span>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Iprod - Reports</SidebarGroupLabel>
+            <SidebarGroupLabel>Iprod - Managment</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => {

@@ -1,8 +1,9 @@
+import RecipeForm from './RecipeForm';
 
 export default function RecipesPage() {
     return (
       <div>
-        <h1>Recipes Page</h1>
+        <RecipeForm/>
       </div>
     );
   }
