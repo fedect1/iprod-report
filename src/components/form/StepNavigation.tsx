@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import clsx from "clsx"
 
+import { useOrderStore } from "@/store/orderStore"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -43,6 +45,11 @@ export default function StepNavigation() {
   const pathname = usePathname()
   const currentPath = pathname.split("/").pop() // "step-1" | "step-2" | "review" etc.
   const [currentStep, setCurrentStep] = useState(0)
+
+  const stepOneIsReady = useOrderStore((state) => state.stepOneIsReady)
+  useEffect(() => {
+    console.log("stepOneIsReady value:", stepOneIsReady); // Verifica el valor aquí
+  }, [stepOneIsReady])
 
   useEffect(() => {
     const stepIndex = steps.findIndex((step) => step.route === currentPath)
@@ -99,7 +106,7 @@ export default function StepNavigation() {
           <Button
             variant="outline"
             size="sm"
-            disabled={currentStep <= 0}
+            disabled={currentStep === 1 && !stepOneIsReady}
             className="mt-2"
             asChild
           >

@@ -11,6 +11,8 @@ export interface OrderState {
   thickness: number
   width: number
   recipe: string
+  stepOneIsReady: boolean
+  stepTwoIsReady: boolean
 
   setLine: (line: string) => void
   setOrder: (order: number) => void
@@ -21,6 +23,8 @@ export interface OrderState {
   setThickness: (thickness: number) => void
   setWidth: (width: number) => void
   setRecipe: (recipe: string) => void
+  setStepOneIsReady: (stepOneIsReady: boolean) => void
+  setStepTwoIsReady: (stepTwoIsReady: boolean) => void
   setResetStore: () => void
 }
 
@@ -36,6 +40,8 @@ export const useOrderStore = create<OrderState>()(
       thickness: 0,
       width: 0,
       recipe: "",
+      stepOneIsReady: false,
+      stepTwoIsReady: false,
 
       setLine: (line) => set({ line }),
       setOrder: (order) => set({ order }),
@@ -46,6 +52,8 @@ export const useOrderStore = create<OrderState>()(
       setThickness: (thickness) => set({ thickness }),
       setWidth: (width) => set({ width }),
       setRecipe: (recipe) => set({ recipe }),
+      setStepOneIsReady: (stepOneIsReady) => set({ stepOneIsReady }),
+      setStepTwoIsReady: (stepTwoIsReady) => set({ stepTwoIsReady }),
 
       setResetStore: () => set({
         line: "",
@@ -57,6 +65,8 @@ export const useOrderStore = create<OrderState>()(
         thickness: 0,
         width: 0,
         recipe: "",
+        stepOneIsReady: false,
+        stepTwoIsReady: false
       }),
     }),
     {

@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input"
 // Importamos el store
 import { useOrderStore } from "@/store/orderStore"
 
+
 interface LineListProp {
   data: Line[]
 }
@@ -91,6 +92,7 @@ export default function StepOneForm({ data }: LineListProp) {
     setWeight,
     setThickness,
     setWidth,
+    setStepOneIsReady,
     // setRecipe, // si lo necesitas
   } = useOrderStore()
 
@@ -123,6 +125,16 @@ export default function StepOneForm({ data }: LineListProp) {
     setThickness(values.thickness)
     setWidth(values.width)
 
+    form.trigger().then((isValid) => {
+      if (isValid) {
+        // Si la validación es exitosa, habilitamos el paso 2
+        setStepOneIsReady(true)
+        router.push("/order-managment/create-order/step-2")
+      } else {
+        // Si no es válido, no habilitamos el paso 2
+        setStepOneIsReady(false)
+      }
+    })
     // Navegamos a la siguiente página solo tras validación exitosa
     router.push("/order-managment/create-order/step-2")
 
@@ -151,14 +163,13 @@ export default function StepOneForm({ data }: LineListProp) {
                     <SelectContent>
                       {data && data.length > 0 ? (
                         data.map((lineItem) => {
-                          // Convertimos el color decimal a #HEX
                           const colorHex =
                             "#" + Number(lineItem.lineColour).toString(16).padStart(6, "0")
 
                           return (
                             <SelectItem key={lineItem.lineShort} value={lineItem.lineShort}>
                               <span
-                                className="inline-block ml-2 w-3 h-3 rounded-full border-2 border-black"
+                                className="inline-block mx-2 w-3 h-3 rounded-full border-2 border-black"
                                 style={{ backgroundColor: colorHex }}
                                 />
                                 {lineItem.lineShort}
