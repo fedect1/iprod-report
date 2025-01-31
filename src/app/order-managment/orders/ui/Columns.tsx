@@ -1,30 +1,15 @@
 "use client"
 
+import { Order } from "@/app/interfaces/order.interface"
 import { Button } from "@/components/ui/button"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 
 
-export type Order = {
-  idWebMIP: number
-  orderNumber: number
-  recipe: string
-  status: 0 | 1 | 2 | 3
-  line: "M21" | "M22" | "M23" | "M24" | "M25" | "M26"
-  date: string
-  article: number
-}
 
 export const columns: ColumnDef<Order>[] = [
     {
-        accessorKey: "idWebMIP",
+        accessorKey: "idwebmip",
         header: ({ column }) => {
             return (
               <Button
@@ -39,62 +24,37 @@ export const columns: ColumnDef<Order>[] = [
 
     },
     {
-       accessorKey: "line",
-       header: ({ column }) => {
-        return (
-          <div className="flex items-center space-x-2">
-            <Select
-              // El filtro se obtiene de 'column.getFilterValue()'
-              value={(column.getFilterValue() as string) ?? ""}
-              onValueChange={(value) => column.setFilterValue(value)}
-            >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="All lines" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All lines</SelectItem>
-                <SelectItem value="M21">M21</SelectItem>
-                <SelectItem value="M22">M22</SelectItem>
-                <SelectItem value="M23">M23</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        )
-      },
-      // 👇 Filtra por coincidencia exacta (o muestra todo si está vacío)
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue || "all") return true
-        return row.getValue(columnId) === filterValue
-      }, 
-    },
-    {
-        accessorKey: "article",
-        header: "Article",
-    },
-    {
-        accessorKey: "orderNumber",
-        header: "Order",
+       accessorKey: "number",
+       header: "Number"
     },
     {
         accessorKey: "recipe",
         header: "Recipe",
     },
     {
-        accessorKey: "date",
+        accessorKey: "system",
+        header: "Line",
+    },
+    {
+        accessorKey: "datetime",
         header: "Date",
+        cell: ({ getValue }) => {
+          const date = new Date(getValue() as string)
+          return new Intl.DateTimeFormat('en-EN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          }).format(date)
+        }
     },
     {
         accessorKey: "status",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                <ArrowUpDown className="ml-0 h-4 w-4" />
-                Status
-              </Button>
-            )
-          },
+        header: "Status"
+    },
+    {
+        accessorKey: "position",
+        header: "Position"
     },
 ]

@@ -3,7 +3,12 @@
 import React, { useState } from "react";
 import { useRecipeStore } from "@/store/recipeStore";
 import { recipeSchema } from "@/app/order-managment/recipes/recipeSchema";
-import { z } from "zod";
+import { Material } from "@/app/interfaces/material.interface";
+
+
+interface RecipeFormProps {
+  materialList: Material[];
+}
 
 // shadcn/ui components
 import {
@@ -26,8 +31,9 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { XCircle } from "lucide-react";
+import MaterialSelect from "./MaterialSelect";
 
-export default function RecipeForm() {
+export default function RecipeForm({ materialList }: RecipeFormProps) {
   const {
     RECIPE_REZPNR_UNI,
     layers,
@@ -69,7 +75,6 @@ export default function RecipeForm() {
       // ...send to API or do further processing
     }
   };
-
   return (
     <Card className="max-w-3xl mx-auto">
       <CardHeader>
@@ -149,17 +154,17 @@ export default function RecipeForm() {
                 {layer.materials.map((mat, matIndex) => (
                   <div
                     key={matIndex}
-                    className="grid grid-cols-6 gap-2 items-end mb-4 p-2 border rounded"
+                    className="grid grid-cols-3 gap-2 items-end mb-4 p-2 border rounded"
                   >
                     {/* Dosing station (1..8) */}
                     <div className="col-span-1">
                       <Label htmlFor={`dosing-${layerIndex}-${matIndex}`}>
-                        Dosing Station
+                        Dosing
                       </Label>
                       <Input
                         id={`dosing-${layerIndex}-${matIndex}`}
                         type="number"
-                        value={mat.dosingStation}
+                        value={matIndex}
                         onChange={(e) =>
                           updateMaterialField(
                             layerIndex,
@@ -173,7 +178,7 @@ export default function RecipeForm() {
                     </div>
 
                     {/* materialName */}
-                    <div className="col-span-2">
+                    {/* <div className="col-span-2">
                       <Label htmlFor={`material-${layerIndex}-${matIndex}`}>
                         Material Name
                       </Label>
@@ -188,6 +193,16 @@ export default function RecipeForm() {
                             "materialName",
                             e.target.value
                           )
+                        }
+                      />
+                    </div> */}
+                    <div className="col-span-2">
+                      <Label htmlFor={`material-${layerIndex}-${matIndex}`}>Material Name</Label>
+                      <MaterialSelect
+                        materials={materialList} 
+                        value={String(mat.materialName || "")} // Asigna el valor de rawmatKey
+                        onChange={(value) =>
+                          updateMaterialField(layerIndex, matIndex, "materialName", Number(value)) // Actualiza rawmatKey
                         }
                       />
                     </div>

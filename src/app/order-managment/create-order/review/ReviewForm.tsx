@@ -23,6 +23,8 @@ export default function ReviewForm() {
     thickness,
     width,
     recipe,
+    stepOneIsReady,
+    stepTwoIsReady,
     setResetStore,
   } = useOrderStore()
 
@@ -30,7 +32,7 @@ export default function ReviewForm() {
     setResetStore()
     router.push("/order-managment/create-order/step-1")
   }
-
+  const isDisabled = !(stepOneIsReady && stepTwoIsReady)
   return (
     <div className="max-w-2xl mx-auto py-4">
       <Card>
@@ -75,7 +77,7 @@ export default function ReviewForm() {
       </Card>
 
       {/* Botón con onClick para limpiar y redireccionar */}
-      <Button onClick={handleClick} className="mt-4 w-full md:w-auto">
+      <Button onClick={handleClick} className="mt-4 w-full md:w-auto" disabled={isDisabled}>
         Confirm Order
       </Button>
     </div>

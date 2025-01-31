@@ -127,11 +127,9 @@ export default function StepOneForm({ data }: LineListProp) {
 
     form.trigger().then((isValid) => {
       if (isValid) {
-        // Si la validación es exitosa, habilitamos el paso 2
         setStepOneIsReady(true)
         router.push("/order-managment/create-order/step-2")
       } else {
-        // Si no es válido, no habilitamos el paso 2
         setStepOneIsReady(false)
       }
     })

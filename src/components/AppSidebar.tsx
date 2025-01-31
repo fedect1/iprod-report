@@ -22,11 +22,11 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
+  // {
+  //   title: "Home",
+  //   url: "/",
+  //   icon: Home,
+  // },
   {
     title: "Order Managment",
     url: "#",
@@ -38,44 +38,44 @@ const items = [
       { title: "Recipes", url: "/order-managment/recipes" },
     ]
   },
-  {
-    title: "State",
-    url: "#",
-    icon: BarChart,
-    subItems: [
-      { title: "Survey machines", url: "/state/survey-machines" },
-      { title: "Machine state", url: "/state/machine-state" },
-      { title: "State ext. var.", url: "/state/state-ext-var" },
-      { title: "Status Silo", url: "/state/status-silo" },
-      { title: "Production State", url: "/state/production-state" },
-      { title: "Material", url: "/state/material" },
-    ],
-  },
-  {
-    title: "Reports",
-    url: "#",
-    icon: FilePieChart,
-    subItems: [
-      { title: "Time Reports", url: "/reports/time-reports" },
-      { title: "Reports di ID webMIP", url: "/reports/reports-di-id-webmip" },
-      { title: "Trend", url: "/reports/trend" },
-      { title: "Report Down Time", url: "/reports/report-down-time" },
-      { title: "Thickness Profile", url: "/reports/thickness-profile" },
-      { title: "Chronological Report", url: "/reports/chronological-report" },
-      { title: "Material", url: "/reports/material" },
-      { title: "Silo", url: "/reports/silo" },
-    ],
-  },
-  {
-    title: "Administration",
-    url: "#",
-    icon: Settings,
-    subItems: [
-      { title: "Shift Book", url: "/administration/shift-book" },
-      { title: "Shift Calendar", url: "/administration/shift-calendar" },
-      { title: "Order Management AV", url: "/administration/order-management-av" },
-    ],
-  },
+  // {
+  //   title: "State",
+  //   url: "#",
+  //   icon: BarChart,
+  //   subItems: [
+  //     { title: "Survey machines", url: "/state/survey-machines" },
+  //     { title: "Machine state", url: "/state/machine-state" },
+  //     { title: "State ext. var.", url: "/state/state-ext-var" },
+  //     { title: "Status Silo", url: "/state/status-silo" },
+  //     { title: "Production State", url: "/state/production-state" },
+  //     { title: "Material", url: "/state/material" },
+  //   ],
+  // },
+  // {
+  //   title: "Reports",
+  //   url: "#",
+  //   icon: FilePieChart,
+  //   subItems: [
+  //     { title: "Time Reports", url: "/reports/time-reports" },
+  //     { title: "Reports di ID webMIP", url: "/reports/reports-di-id-webmip" },
+  //     { title: "Trend", url: "/reports/trend" },
+  //     { title: "Report Down Time", url: "/reports/report-down-time" },
+  //     { title: "Thickness Profile", url: "/reports/thickness-profile" },
+  //     { title: "Chronological Report", url: "/reports/chronological-report" },
+  //     { title: "Material", url: "/reports/material" },
+  //     { title: "Silo", url: "/reports/silo" },
+  //   ],
+  // },
+  // {
+  //   title: "Administration",
+  //   url: "#",
+  //   icon: Settings,
+  //   subItems: [
+  //     { title: "Shift Book", url: "/administration/shift-book" },
+  //     { title: "Shift Calendar", url: "/administration/shift-calendar" },
+  //     { title: "Order Management AV", url: "/administration/order-management-av" },
+  //   ],
+  // },
 ]
 
 export function AppSidebar() {
@@ -99,7 +99,7 @@ export function AppSidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Iprod - Managment</SidebarGroupLabel>
+            <SidebarGroupLabel>Iprod - DEMO</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => {
